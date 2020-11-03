@@ -1,0 +1,16 @@
+body{
+  width: 100%;
+  height: 100%;
+  color: #fff;
+  background: url("../assets/fp_home_bg.jpg") no-repeat center top;
+  zoom:1
+}
+.p10{
+  padding: 10px;
+}
+.tc{
+  text-align:center;
+}
+.fr{
+  float: right;
+}
