@@ -10,6 +10,13 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './assets/reset.css'
 import './assets/index.css'
 
+// import Cesium from 'cesium/Source/Cesium'
+import Cesium from 'cesium/Source/Cesium'
+import 'cesium/Source/Widgets/widgets.css'
+// import CesiumNavigation from "cesium-navigation-es6";
+
+Vue.prototype.Cesium=Cesium;
+
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false
