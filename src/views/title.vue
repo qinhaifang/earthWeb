@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="title">{{title}}</div>
+  <div class="title">
+    {{title}}
   </div>
 </template>
 <script>
@@ -10,8 +10,13 @@ export default {
 </script>
 <style scoped>
   .title{
-    width: 80%;
-    padding: 10px;
-    background: linear-gradient(#0f6fb3, #093c73);
+    height: 50px;
+    line-height: 39px;
+    padding-left: 15px;
+    background: url('../assets/titleBackground.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* width: 80%;
+    padding: 10px; */
   }
 </style>

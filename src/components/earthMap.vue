@@ -148,14 +148,12 @@ export default {
         })
       )
       this.viewer.imageryLayers.removeAll();
-      console.log('imgLayer',imageLayer);
       this.viewer.imageryLayers.add(imageLayer,0)
     },
     // 加载行政边界
     addZoneBoundary(obj,isFly = true){
-      console.log(obj)
       let neighborhoodsPromise = Cesium.GeoJsonDataSource.load(`static/data/${obj.zoneName}.json`,{
-        stroke:Cesium.Color.RED,
+        stroke:Cesium.Color.YELLOW,
         fill:Cesium.Color.fromCssColorString("#3d88c6").withAlpha(0.8),
         strokeWidth:3
       })
