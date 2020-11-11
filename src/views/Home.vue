@@ -57,13 +57,9 @@
       </div>
       <div class="top">
         <ul>
-          <li>
-            <span>覆盖区县</span>
-            <p class="p10"><span>35</span>&nbsp;&nbsp;个</p>
-          </li>
-          <li>
-            <span>发放金额</span>
-            <p class="p10"><span>35</span>&nbsp;&nbsp;个</p>
+          <li v-for="(item,index) in totalData" :key="index">
+            <span>{{item.name}}</span>
+            <p class="p10"><span>{{item.num}}</span>&nbsp;&nbsp;{{item.unit}}</p>
           </li>
         </ul>
       </div>
@@ -166,14 +162,28 @@ export default {
           pay:50,
           num:1
         },
+      ],
+      totalData:[
+        {name:'覆盖区县',num:35,unit:'个'},
+        {name:'发放金额',num:9123,unit:'万元'},
+        {name:'补贴类型',num:14,unit:'个'},
+        {name:'受益人口',num:520,unit:'人'},
+        {name:'代发银行',num:5,unit:'个'},
+        {name:'主管部门',num:8,unit:'个'},
       ]
     };
   },
   mounted() {
     // const vm = this;
     // vm.$nextTick(()=>{})
+    console.log(this.numFormat(this.totalData[1].num))
   },
   methods: {
+    numFormat(num) {
+        var c = (num.toString().indexOf ('.') !== -1) ? num.toLocaleString() : num.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+        this.totalData[1].num = c
+        return c;
+    },
     handleClick(tab, event) {
       console.log(111,tab.name);
     },
@@ -275,17 +285,19 @@ export default {
     width: 100%;
   }
   .top ul li{
-    width: 10%;
+    width: 9%;
     float: left;
   }
   .top ul li span{
-    font-size: 20px;
+    font-size: 18px;
     
+  }
+  .top ul li p{
+    color: rgba(255, 214, 108, 1);
   }
   .top ul li p span{
     display: inline-block;
-    font-size: 40px;
-    color: rgba(255, 214, 108, 1);
+    font-size: 40px!important;
     font-family: 'number';
   }
 
