@@ -9,7 +9,8 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/reset.css'
 import './assets/index.css'
-
+import Bus from "./bus/bus"
+window.Bus = Bus;
 
 // import Cesium from 'cesium/Source/Cesium'
 import Cesium from 'cesium/Source/Cesium'

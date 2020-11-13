@@ -2,9 +2,11 @@
   <div id="main">
     <earth-map></earth-map>
     <header>
-      <el-date-picker v-model="year" type="year" placeholder="选择年">
+      <div class="datePicker">
+        <el-date-picker v-model="year" type="year" placeholder="选择年">
       </el-date-picker>
-      <div class="fr p10">
+      </div>
+      <div class="fr p10" style="position: relative;bottom: 20px;">
         欢迎您登录 &nbsp;&nbsp;
         <span><i class="el-icon-switch-button blue"></i></span>
       </div>
@@ -18,10 +20,14 @@
         <title-box :title="titleBox2"></title-box>
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
           <el-tab-pane label="发放资金" name="1" :key='activeName'>
-              <bar-chart :barData="bar"></bar-chart>
+              <div class="box"> 
+                <bar-chart :barData="bar"></bar-chart>
+              </div>
           </el-tab-pane>
-          <el-tab-pane label="发放人次" name="2" :key='activeName'>
-            <bar-chart :barData="bar1"></bar-chart>
+          <el-tab-pane label="发放人次" name="2" :key="activeName+'1'">
+            <div class="box"> 
+              <bar-chart :barData="bar1"></bar-chart>
+            </div>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -48,10 +54,14 @@
         <title-box :title="titleBox4"></title-box>
         <el-tabs v-model="activeNameArea" type="card" @tab-click="handleClickArea">
           <el-tab-pane label="发放资金" name="1" :key='activeNameArea'>
-              <bar-chart :barData="bar2"></bar-chart>
+              <div class="box"> 
+                <bar-chart :barData="bar2"></bar-chart>
+              </div>
           </el-tab-pane>
-          <el-tab-pane label="发放人次" name="2" :key='activeNameArea'>
-            <bar-chart :barData="bar3" ></bar-chart>
+          <el-tab-pane label="发放人次" name="2" :key='activeNameArea+"1"'>
+            <div class="box"> 
+              <bar-chart :barData="bar3"></bar-chart>
+            </div>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -210,12 +220,13 @@ export default {
   }
   h3 {
     font-family: 'alhyznh';
-    font-size: 28px;
+    font-size: 32px;
     letter-spacing: 4px;
     /* color: antiquewhite; */
     background: linear-gradient(to right, #2968E8, #72E6FF);
     -webkit-background-clip: text;
     color: transparent;
+    padding-left: 9%;
   }
   .container{
     width: 100%;
@@ -283,6 +294,7 @@ export default {
   }
   .top ul{
     width: 100%;
+    text-align: center;
   }
   .top ul li{
     width: 9%;
@@ -299,6 +311,14 @@ export default {
     display: inline-block;
     font-size: 40px!important;
     font-family: 'number';
+  }
+  .box{
+    height: 450px;
+    overflow: auto;
+  }
+  .datePicker{
+    position: relative;
+    top: 18%;
   }
 
   

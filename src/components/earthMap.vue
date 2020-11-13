@@ -102,11 +102,19 @@ export default {
           name: "全国"
         }
       ],
+      currentZoneObject: null,
     };
   },
   mounted() {
     this.init();
-    this.addZoneBoundary(this.zoneObject[0])
+    window.viewer = this.viewer;
+    this.addLister(); //监听地球点击事件
+    this.addZoneBoundary(this.zoneObject[0]);
+    Bus.$on("zone-click-event",zoneName =>{
+      console.log(zoneName)
+      this.zoneLocation(zoneName);
+      this.addPKPoint();
+    })
   },
   methods: {
     init() {
@@ -173,8 +181,8 @@ export default {
               labels[name] = name;
             }
             if (
-              name === "山西省" ||
-              name === "右江区" ||
+              name === "大同市" ||
+              name === "吕梁市" ||
               name === "都安瑶族自治县" ||
               name === "金秀瑶族自治县"
             ) {
@@ -217,7 +225,66 @@ export default {
         destination:Cesium.Cartesian3.fromDegrees(log,lat,height),
         duration:3.0
       })
-    }
+    },
+    // 加载下一级
+    zoneLocation(zoneName) {
+      for (let i = 0; i < this.zoneObject.length; i++) {
+        if (this.zoneObject[i].name === zoneName) {
+          this.currentZoneObject = this.zoneObject[i];
+          break;
+        }
+      }
+      if (this.currentZoneObject) {
+        this.clearZoneBoundary();
+        this.addZoneBoundary(this.currentZoneObject);
+      }
+    },
+    // 监听地球点击
+    addLister(){
+      const handler = new Cesium.ScreenSpaceEventHandler(
+        this.viewer.scene.canvas
+      );
+      handler.setInputAction(movement => {
+        const obj = this.viewer.scene.pick(movement.position);
+        if (Cesium.defined(obj) && obj.id instanceof Cesium.Entity) {
+          const model = obj.id;
+          Bus.$emit("zone-click-event", model.name);
+        }
+      }, Cesium.ScreenSpaceEventType.LEFT_DOWN);
+    },
+    //清除行政区划
+    clearZoneBoundary() {
+      this.viewer.dataSources.removeAll();
+    },
+    addPKPoint() {
+      Cesium.GeoJsonDataSource.load("static/data/fg.json").then(dataSource => {
+        viewer.dataSources.add(dataSource);
+        var entities = dataSource.entities.values;
+        for (var i = 0; i < entities.length; i++) {
+          var entity = entities[i];
+          entity.billboard = undefined;
+          entity.point = new Cesium.PointGraphics({
+            color: Cesium.Color.RED,
+            pixelSize: 10
+          });
+        }
+        //添加面
+        // for (let i = 0; i < pkxDataUrl.length; i++) {
+        //   this.addPKXBoundary(pkxDataUrl[i]);
+        // }
+      });
+    },
+    // 添加面
+    // addPKXBoundary(fileName) {
+    //   console.log('fileName',fileName)
+    //   this.viewer.dataSources.add(
+    //     Cesium.GeoJsonDataSource.load(`static/data/${fileName}.json`, {
+    //       stroke: Cesium.Color.WHITE,
+    //       fill: Cesium.Color.fromCssColorString("#FF1493").withAlpha(1),
+    //       strokeWidth: 3
+    //     })
+    //   );
+    // },
   },
 };
 </script>
