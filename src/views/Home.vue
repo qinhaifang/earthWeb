@@ -34,6 +34,7 @@
       <div class="right">
         <title-box :title="titleBox3"></title-box>
         <el-select v-model="value" class="selectInput" placeholder="请选择补贴类型">
+          <el-option value="">全部</el-option>
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -67,12 +68,24 @@
       </div>
       <div class="top">
         <ul>
-          <li v-for="(item,index) in totalData" :key="index">
+          <li v-for="(item,index) in totalData" :key="index" @click="alertBox(index)">
+            <img class="helpIcon" v-show="index == 4 || index ==5" src="../assets/icon.png" alt="">
             <span>{{item.name}}</span>
             <p class="p10"><span>{{item.num}}</span>&nbsp;&nbsp;{{item.unit}}</p>
           </li>
         </ul>
       </div>
+      <el-dialog
+        title="主管部门"
+        :visible.sync="depBox"
+        destroy-on-close
+        width="30%">
+        <el-table :data="depData" height="500px">
+          <el-table-column property="name" label="主管部门" ></el-table-column>
+          <el-table-column property="value" label="补贴类型数" width="120" align="center"></el-table-column>
+          <el-table-column property="totalCount" label="发放金额（万元）" width="150" align="center"></el-table-column>
+        </el-table>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -99,6 +112,14 @@ export default {
       total:117,
       activeName:"1",
       activeNameArea:"1",
+      depBox:false,  //主管部门弹窗
+      depData: [
+        {
+          name:'test',
+          value:'19',
+          totalCount:'100',
+        }
+      ],
       pie1:{
         id:"pieChart1",
         height:'200px',
@@ -200,6 +221,11 @@ export default {
     handleClickArea(tab, event) {
       console.log(111,tab.name);
     },
+    alertBox(index){
+      if(index == 5){
+        this.depBox = true
+      }
+    }
   },
 };
 </script>
@@ -334,7 +360,31 @@ export default {
     width: 300px;
     margin-left: 10px;
   }
-  .el-date-editor.el-input{
+  .el-dialog{
+    background: linear-gradient(90deg, rgba(41, 104, 232, 0.7) 0%, rgba(0, 210, 255, 0) 100%);
+    border: 1px solid #00B1FF;
+    border-radius: 4px;
+    color: #fff;
+  }
+  .el-dialog__title,.el-dialog__body{
+    color: #fff;
+  }
+  .el-table ,.el-table--fit ,.el-table th, .el-table tr{
+    color: #fff;
+    background: rgba(0, 0, 0, 0);
+  }
+  .el-table tbody tr:hover>td ,.el-table tbody tr>td{ 
+    background-color:rgba(0, 0, 0, 0)!important;
+    border-bottom:1px dashed #ccc;
     
+  }
+  .el-table th:hover, .el-table tr:hover td{
+    background:none;
+    border-bottom: none;
+  }
+  .mapBox .el-dialog{
+    position: absolute!important;
+    right: 20%;
+    top: 13%;
   }
 </style>

@@ -1,6 +1,26 @@
 <template>
   <div class="map">
     <div id="cesium-earth"></div>
+    <el-dialog
+      :title="mapBoxTitle"
+      :visible.sync="mapBox"
+      destroy-on-close
+      :modal=false
+      width="20%"
+      class="mapBox"
+      >
+      <ul>
+        <li>
+          发放资金：<span>20</span>万元
+        </li>
+        <li>
+          发放人次：<span>20</span>人
+        </li>
+        <li>
+          补贴类型数量：<span>20</span>个
+        </li>
+      </ul>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -9,6 +29,8 @@ export default {
   data() {
     return {
       viewer: null,
+      mapBoxTitle:null,
+      mapBox:false,
       zoneObject: [
         {
           zoneName: "sx",
@@ -100,7 +122,14 @@ export default {
           lat: 30,
           height: 10911680,
           name: "全国"
-        }
+        },
+        {
+          zoneName: "xiaoyi",
+          lon: 111.781568,
+          lat: 37.144474,
+          height: 311615,
+          name: "孝义市"
+        },
       ],
       currentZoneObject: null,
     };
@@ -110,11 +139,20 @@ export default {
     window.viewer = this.viewer;
     this.addLister(); //监听地球点击事件
     this.addZoneBoundary(this.zoneObject[0]);
+    // this.addFGPoint();
     Bus.$on("zone-click-event",zoneName =>{
-      console.log(zoneName)
+      if (!zoneName) {
+        return;
+      }
+      Bus.$emit("clear-all-mark");
+      this.mapBox = true;
+      this.mapBoxTitle = zoneName
       this.zoneLocation(zoneName);
-      this.addPKPoint();
-    })
+      
+    }),
+     Bus.$on("clear-all-mark", () => {
+      this.clearZoneBoundary();
+    });
   },
   methods: {
     init() {
@@ -183,8 +221,8 @@ export default {
             if (
               name === "大同市" ||
               name === "吕梁市" ||
-              name === "都安瑶族自治县" ||
-              name === "金秀瑶族自治县"
+              name === "晋城市" ||
+              name === '孝义市'
             ) {
               entity.polygon.material = Cesium.Color.fromCssColorString(
                 "#ff3300"
@@ -256,7 +294,7 @@ export default {
     clearZoneBoundary() {
       this.viewer.dataSources.removeAll();
     },
-    addPKPoint() {
+    addFGPoint() {
       Cesium.GeoJsonDataSource.load("static/data/fg.json").then(dataSource => {
         viewer.dataSources.add(dataSource);
         var entities = dataSource.entities.values;
@@ -292,5 +330,8 @@ export default {
 .cesium-earth {
   width: 100%;
   height: 100%;
+}
+.mapBox ul li {
+  padding: 10px;
 }
 </style>
