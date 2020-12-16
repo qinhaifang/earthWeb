@@ -6,7 +6,7 @@
       :visible.sync="mapBox"
       destroy-on-close
       :modal=false
-      width="20%"
+      width="18%"
       class="mapBox"
       >
       <ul>
@@ -25,6 +25,7 @@
 </template>
 <script>
 const layer = "http://220.181.130.171:9090/gisserver/tiles/mbtiles/Global_Image/{z}/{x}/{reverseY}.jpg";
+let timerRotate;
 export default {
   data() {
     return {
@@ -159,6 +160,7 @@ export default {
       this.viewer = new Cesium.Viewer("cesium-earth", {
         baseLayerPicker: false, //地图切换控件
         fullscreenButton: false, //全屏按钮
+        // skyAtmosphere: false,//关闭地球光环
         vrButton: false, //双屏按钮
         geocoder: false, //地名查找
         homeButton: false, //首页按钮
@@ -170,9 +172,14 @@ export default {
         animation: false, //动画控制,左下角方向盘
         shouldAnimate: true,
         timeline: false,
+        orderIndependentTranslucency: false,//去掉地球表面的大气效果的黑圈问题
+        skyBox: new Cesium.SkyBox({  
+          show: false
+        }),   //关闭月亮、星星等
         contextOptions: {
           webgl: {
-            preserveDrawingBuffer: true,
+            alpha:true //改变cesium背景
+            // preserveDrawingBuffer: true,
           },
         },
         // imageryProvider: new Cesium.createTileMapServiceImageryProvider({
@@ -181,11 +188,20 @@ export default {
         // }),
       });
       this.viewer.cesiumWidget.creditContainer.style.display = "none";
+      this.viewer.scene.skyBox.show = true;
+      this.viewer.scene.backgroundColor = new Cesium.Color( 0, 0, 0, 0);
       this.addImageLayer();
-      this.viewer.camera.setView({
-        destination:Cesium.Cartesian3.fromDegrees(108.8,35.5,22000000)
-      })
-
+      // 地球自转
+      var x = 113;
+      timerRotate = setInterval(()=>{
+        x = x + 0.3;
+          if (x >= 178.5) {
+            x = -180
+          }
+          this.viewer.camera.setView({
+            destination:Cesium.Cartesian3.fromDegrees(x,35.5,30000000)
+          })
+      },16)
     },
     addImageLayer(){
       const imageLayer = new Cesium.ImageryLayer(
@@ -327,11 +343,21 @@ export default {
 };
 </script>
 <style scoped>
-.cesium-earth {
+#cesium-earth {
   width: 100%;
   height: 100%;
+  background-image: url('../assets/bg1.png');
+}
+.mapBox{
+  z-index: 0!important;
 }
 .mapBox ul li {
   padding: 10px;
+}
+</style>
+<style>
+.map .el-dialog__body{
+  padding-left: 0;
+  color: #fff!important;
 }
 </style>

@@ -140,11 +140,16 @@ export default {
     },
     initChart(){
       this.barChart = echarts.init(this.$refs.myChart,true);
-      this.setOptions(this.barData)
+      this.setOptions(this.barData);
+      this.barChart.off("click");
+      // triggerEvent为true时，触发点击事件
+      if(this.barData.id == 'barChart' || this.barData.id == 'barChart1' ){
+        this.barChart.on("click", function (params) {
+          Bus.$emit("buTeiDesc", params.name,params.dataIndex,true);
+        });
+      }
     }
-  },
-  
-  
+  }
 };
 </script>
 <style scoped>
