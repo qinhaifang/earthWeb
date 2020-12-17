@@ -47,8 +47,8 @@
             <li v-for="(item,index) in rankData" :key="index">
               <span :class="{color1:index==0,color2:index==1,color3:index==2}">{{index+1}}</span>
               <span>{{item.name}}</span>
-              <span>{{item.pay}} 万元</span>
               <span>{{item.num}} 笔</span>
+              <span>{{item.pay}} 万元</span>
             </li>
           </ul>
         </div>
@@ -74,6 +74,9 @@
             <p class="p10"><span>{{item.num}}</span>&nbsp;&nbsp;{{item.unit}}</p>
           </li>
         </ul>
+        <div class="earthIcon" @click="clickEarth()">
+          <img src="../assets/earth.png" alt="">
+        </div>
       </div>
       <el-dialog
         title="主管部门"
@@ -262,6 +265,10 @@ export default {
       if(index == 5){
         this.depBox = true
       }
+    },
+    clickEarth(){
+      Bus.$emit('flayToMap');
+      // alert(1)
     }
   },
 };
@@ -493,6 +500,17 @@ export default {
       margin-left: 205px;
       opacity: 1;
     }
+  }
+  .earthIcon{
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: 150px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .earthIcon img{
+    width: 50px;
   }
   
 </style>

@@ -37,7 +37,7 @@ export default {
           zoneName: "sx",
           lon: 112.549248,
           lat: 37.857014,
-          height: 1314150,
+          height: 1600000, //进入页面显示的远近距离
           name: "山西省"
         },
         {
@@ -139,8 +139,14 @@ export default {
     this.init();
     window.viewer = this.viewer;
     this.addLister(); //监听地球点击事件
-    this.addZoneBoundary(this.zoneObject[0]);
+    // this.addZoneBoundary(this.zoneObject[0]);
     // this.addFGPoint();
+    Bus.$on('flayToMap',()=>{ 
+      clearInterval(timerRotate);      
+      this.timerRotate = null;
+      this.mapBox = true;
+      this.addZoneBoundary(this.zoneObject[0])
+    })
     Bus.$on("zone-click-event",zoneName =>{
       if (!zoneName) {
         return;
@@ -309,36 +315,7 @@ export default {
     //清除行政区划
     clearZoneBoundary() {
       this.viewer.dataSources.removeAll();
-    },
-    addFGPoint() {
-      Cesium.GeoJsonDataSource.load("static/data/fg.json").then(dataSource => {
-        viewer.dataSources.add(dataSource);
-        var entities = dataSource.entities.values;
-        for (var i = 0; i < entities.length; i++) {
-          var entity = entities[i];
-          entity.billboard = undefined;
-          entity.point = new Cesium.PointGraphics({
-            color: Cesium.Color.RED,
-            pixelSize: 10
-          });
-        }
-        //添加面
-        // for (let i = 0; i < pkxDataUrl.length; i++) {
-        //   this.addPKXBoundary(pkxDataUrl[i]);
-        // }
-      });
-    },
-    // 添加面
-    // addPKXBoundary(fileName) {
-    //   console.log('fileName',fileName)
-    //   this.viewer.dataSources.add(
-    //     Cesium.GeoJsonDataSource.load(`static/data/${fileName}.json`, {
-    //       stroke: Cesium.Color.WHITE,
-    //       fill: Cesium.Color.fromCssColorString("#FF1493").withAlpha(1),
-    //       strokeWidth: 3
-    //     })
-    //   );
-    // },
+    }
   },
 };
 </script>
