@@ -197,7 +197,7 @@ export default {
       this.viewer.scene.skyBox.show = true;
       this.viewer.scene.backgroundColor = new Cesium.Color( 0, 0, 0, 0);
       this.addImageLayer();
-      // 地球自转
+      // 地球自转 方法一
       var x = 113;
       timerRotate = setInterval(()=>{
         x = x + 0.3;
@@ -208,6 +208,31 @@ export default {
             destination:Cesium.Cartesian3.fromDegrees(x,35.5,30000000)
           })
       },16)
+      // 地球自转 方法二
+      // var i = Date.now();
+      // function rotate(){
+      //   var a = .1;
+      //   var t = Date.now();
+      //   var n = (t-1) /1e3;
+      //   i = t;
+      //   viewer.scene.camera.rotate(Cesium.Cartesian3.UNIT_Z,-a * n);
+      // }
+      // this.viewer.clock.onTick.addEventListener(rotate);
+      // setTimeout(function(){
+      //   this.viewer.clock.onTick.removeEventListener(rotate);
+      // },5000)
+      // 地球自转 方法三
+      // this.viewer.clock.multiplier = 200;//速度
+      // this.viewer.clock.shouldAnimate = true;
+      // var previousTime = this.viewer.clock.currentTime.secondsOfDay;
+      // function onTickCallback() {
+      //   var spinRate = 1;
+      //   var currentTime = viewer.clock.currentTime.secondsOfDay;
+      //   var delta = (currentTime - previousTime) / 1000;
+      //   previousTime = currentTime;
+      //   viewer.scene.camera.rotate(Cesium.Cartesian3.UNIT_Z, -spinRate * delta);
+      // }
+      // this.viewer.clock.onTick.addEventListener(onTickCallback);
     },
     addImageLayer(){
       const imageLayer = new Cesium.ImageryLayer(
